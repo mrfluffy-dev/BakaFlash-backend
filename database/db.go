@@ -8,9 +8,9 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-func run() {
+func Run() {
 	db, _ := sql.Open("sqlite3", "./srs.db")
-	statement, _ := db.Prepare("CREATE TABLE if NOT EXIST balls(id INTEGER PRIMARY KEY, firstName TEXT, lastName TEXT)")
+	statement, _ := db.Prepare("CREATE TABLE if NOT EXISTS balls(id INTEGER PRIMARY KEY, firstName TEXT, lastName TEXT)")
 	statement.Exec()
 	queryStatment, _ := db.Prepare("INSERT INTO balls (firstName, lastName) VALUES (?, ?)")
 	queryStatment.Exec("Vet", "Koos")

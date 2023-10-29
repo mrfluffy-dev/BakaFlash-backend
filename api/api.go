@@ -2,8 +2,9 @@ package api
 
 import (
 	db "BakaFlash/database"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func SetupRoutes(r *gin.Engine) {
@@ -24,6 +25,12 @@ func SetupRoutes(r *gin.Engine) {
 		}
 		c.BindJSON(&json)
 		db.Run(json.FirstName, json.LastName)
+		c.JSON(http.StatusOK, gin.H{
+			"message": "test passed",
+		})
+	})
+	r.GET("/test/allUsers", func(c *gin.Context) {
+		db.GetUsers()
 		c.JSON(http.StatusOK, gin.H{
 			"message": "test passed",
 		})

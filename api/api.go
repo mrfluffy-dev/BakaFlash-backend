@@ -29,10 +29,19 @@ func SetupRoutes(r *gin.Engine) {
 			"message": "test passed",
 		})
 	})
-	r.GET("/test/allUsers", func(c *gin.Context) {
-		db.GetUsers()
-		c.JSON(http.StatusOK, gin.H{
-			"message": "test passed",
-		})
+	// /getUsers returns a json array of all users in the database
+	r.GET("/getUsers", func(c *gin.Context) {
+		//GetUsers returns a slice of person structs
+		users := db.GetUsers()
+		userJson := []gin.H{}
+		for _, user := range users {
+			userJson = append(userJson, gin.H{
+				"id":        user.Id,
+				"firstName": user.FirstName,
+				"lastName":  user.LastName,
+			})
+		}
+		c.JSON(http.StatusOK, userJson)
+
 	})
 }

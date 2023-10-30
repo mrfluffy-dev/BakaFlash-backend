@@ -2,9 +2,10 @@ package api
 
 import (
 	db "BakaFlash/database"
-	"github.com/gin-gonic/gin"
-	"io/ioutil"
+	"io"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func SetupRoutes(r *gin.Engine) {
@@ -72,7 +73,7 @@ func SetupRoutes(r *gin.Engine) {
 		// err = c.SaveUploadedFile(file, "uploads/"+imageName)
 
 		// Or, save it to the database using your UploadImage function
-		imageBytes, err := ioutil.ReadAll(file)
+		imageBytes, err := io.ReadAll(file)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": "Failed to read the file",

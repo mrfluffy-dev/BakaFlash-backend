@@ -50,3 +50,41 @@ func GetUsers() []Person {
 	}
 	return personSlice
 }
+
+// upload image to db
+func UploadImage(imageName string, imageType string, image []byte) {
+	db, _ := sql.Open("sqlite3", "./srs.db")
+	statement, _ := db.Prepare("CREATE TABLE if NOT EXISTS images(id INTEGER PRIMARY KEY, imageName TEXT, imageType TEXT, image BLOB)")
+	statement.Exec()
+	queryStatment, _ := db.Prepare("INSERT INTO images (imageName, imageType, image) VALUES (?, ?, ?)")
+	queryStatment.Exec(imageName, imageType, image)
+	defer db.Close()
+}
+
+func GetImage(imageName string) []byte {
+	db, _ := sql.Open("sqlite3", "./srs.db")
+	statement, _ := db.Prepare("CREATE TABLE if NOT EXISTS images(id INTEGER PRIMARY KEY, imageName TEXT, imageType TEXT, image BLOB)")
+	statement.Exec()
+	defer db.Close()
+	rows, _ := db.Query("SELECT image FROM images WHERE imageName = ?", imageName)
+	var image []byte
+	for rows.Next() {
+		rows.Scan(&image)
+	}
+	return image
+}
+
+func ListImageNames() []string {
+	db, _ := sql.Open("sqlite3", "./srs.db")
+	statement, _ := db.Prepare("CREATE TABLE if NOT EXISTS images(id INTEGER PRIMARY KEY, imageName TEXT, imageType TEXT, image BLOB)")
+	statement.Exec()
+	defer db.Close()
+	rows, _ := db.Query("SELECT imageName FROM images")
+	var imageNames []string
+	var imageName string
+	for rows.Next() {
+		rows.Scan(&imageName)
+		imageNames = append(imageNames, imageName)
+	}
+	return imageNames
+}
